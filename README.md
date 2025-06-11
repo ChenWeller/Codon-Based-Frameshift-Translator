@@ -1,52 +1,100 @@
-# Codon-Based-Frameshift-Translator
+# Codon-Based Frameshift Translator
+
+[![Python version](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
+## Table of Contents
+- [What does this project do?](#what-does-this-project-do)
+- [Why is this project useful?](#why-is-this-project-useful)
+- [What kind of input and output does it expect?](#what-kind-of-input-and-output-does-it-expect)
+- [Technical setup](#technical-setup)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Example use cases](#example-use-cases)
+- [Known limitations](#known-limitations)
+- [Future directions](#future-directions)
+- [This project was developed as part of the Python programming course](#this-project-was-developed-as-part-of-the-python-programming-course)
+
+## What does this project do?
 
 This Python project provides a tool to generate frameshifted protein sequences based on coding DNA sequences (CDS) from any organism. The user can select one or more specific codons where frameshifting should occur and define parameters such as:
 
-Frameshift direction (+1, -1, -2)
+- Frameshift direction (`+1`, `-1`, `-2`)
+- Whether the shifted amino acid is included in the new sequence
+- How much of the upstream sequence is retained
+- Whether translation stops at a specific amino acid
+- Whether to trim based on enzymatic digestion sites (e.g., for proteomics)
 
-Whether the shifted amino acid is included in the new sequence
+The tool is primarily designed for generating peptide databases that simulate out-of-frame translation events, which can be valuable in ribosome profiling, proteomics, or immunopeptidomics studies.
 
-How much of the upstream sequence is retained
+## Why is this project useful?
 
-Whether translation stops at a specific amino acid
-
-Whether to trim based on enzymatic digestion sites (e.g., for proteomics)
-
-This tool can help researchers or lab members simulate out-of-frame translation events or generate peptide databases for ribosome profiling, proteomics, or immunopeptidomics studies.
-
-Why is this project useful?
-Frameshifting is a biological process that can result in novel peptides, with relevance in viral infections, cancer, and translational regulation. This script automates what would otherwise be a manual and error-prone task: generating and curating potential out-of-frame peptides from genomic sequences.
+Frameshifting is a biological process that can result in novel peptides, which are highly relevant in various biological contexts such as viral infections, cancer, and translational regulation. This script automates the generation of potential out-of-frame peptides, a task that would otherwise be manual and error-prone. The tool saves time and ensures accuracy when analyzing coding sequences.
 
 This project is particularly useful for:
+- **Researchers** exploring non-canonical translation events.
+- **Bioinformaticians** analyzing ribosome profiling data.
+- **Immunologists** identifying cryptic epitopes.
+- **Peptidomics/proteomics labs** needing custom peptide libraries.
 
-Researchers exploring non-canonical translation events
+## What kind of input and output does it expect?
 
-Bioinformaticians analyzing ribosome profiling data
+### Input
+- A **FASTA file** containing coding DNA sequences (CDS).
+- A **codon of interest** (e.g., `CGA`).
+- Optional: a **CSV file** listing specific genes to include in the processing.
 
-Immunologists identifying potential cryptic epitopes
+### Output
+- A **FASTA file** containing translated peptides with the frameshift applied.
+- Optionally, a **non-redundant version** of the file processed using `cd-hit`.
 
-Peptidomics/proteomics labs needing custom peptide libraries
+Each output sequence is labeled with metadata including:
+- The **codon position** where the frameshift occurred.
+- The **direction of the frameshift** (e.g., `+1`, `-1`, `-2`).
+- The **site of the shift** (e.g., A-site, P-site).
+- **Truncated in-frame/out-of-frame sequences** for downstream analysis.
 
-What kind of input and output does it expect?
-Input
-A FASTA file containing coding DNA sequences (CDS)
+## Example use cases
 
-A codon of interest (e.g., CGA)
+### Command-line Example
 
-Optional: a CSV file listing specific genes to include
+#Python 3 codon_frameshift.py -f input_sequences.fasta -c CGA -s Asite -di P1 -da Peptidomics -u 13 -l chimeras -st -o output/frameshifted
 
-Output
-A FASTA file containing translated peptides with the frameshift applied
+## Testing the Script
+To verify if everything is set up properly, run:
 
-Optionally, a non-redundant version of the file processed using cd-hit
+python3 codon_frameshift.py -h
 
-Each output sequence is labeled with metadata including the codon position, direction of frameshift, site of shift, and truncated in-frame/out-of-frame sequences.
+This will display the help message and available parameters.
 
-Example use cases
-bash
-Copy
-Edit
-python3 codon_frameshift.py \
+## Technical setup
+
+### Requirements
+Before running the script, make sure you have the following installed:
+
+- Python 3.6 or higher
+- Required Python libraries:
+  pip install biopython pandas
+
+The cd-hit program must be installed and accessible in your system's PATH.
+
+### Installation
+Clone this repository:
+git clone https://github.com/ChenWeller/Codon-Based-Frameshift-Translator.git
+cd Codon-Based-Frameshift-Translator
+
+Install Python dependencies:
+pip install -r requirements.txt
+
+Install cd-hit:
+Ensure cd-hit is installed on your system. You can install it using the package manager on Linux or via brew on macOS:
+
+#### Ubuntu/Debian:
+sudo apt install cd-hit
+
+### Running the Script
+To run the frameshift translation script, use the following command:
+#python3 codon_frameshift.py \
   -f input_sequences.fasta \
   -c CGA \
   -s Asite \
@@ -56,55 +104,27 @@ python3 codon_frameshift.py \
   -l chimeras \
   -st \
   -o output/frameshifted
-This command shifts sequences at codon CGA, at the A-site, using a +1 frameshift, stops at the next codon matching the selected one, and writes output files to the output/ folder.
 
-Technical setup
-Requirements
-Python 3.6+
+This will generate frameshifted sequences for the provided input file.
 
-Biopython
+### Troubleshooting
+If you face issues with cd-hit, ensure it is correctly installed and available in the system’s PATH. You can check this by running:
+cd-hit -v
 
-pandas
+If you encounter errors related to biopython or pandas, ensure all dependencies are correctly installed via pip.
 
-cd-hit (must be installed and accessible in system PATH)
+## Known limitations
+- Only supports standard codon tables.
+- Only FASTA inputs are supported (no GTF/GFF parsing for now).
+- Memory usage may increase with very large genomes.
 
-Installation
-bash
-Copy
-Edit
-pip install biopython pandas
-Install cd-hit via your package manager (e.g., apt, brew) or from source:
-https://github.com/weizhongli/cdhit
+## Future directions
+- GUI interface for codon selection and parameter tuning.
+- Support for non-standard genetic codes.
+- Integration with Ensembl REST API for automated genome fetching.
 
-Running the script
-To run the script:
+## License
+MIT License.
 
-bash
-Copy
-Edit
-python3 codon_frameshift.py -h
-This will show all configurable options including codon, shift direction, translation length, and trimming behavior.
-
-Notes
-The tool removes sequences that are too short, contain ambiguous nucleotides (N), or do not start with a canonical start codon (ATG).
-
-Duplicate sequences are automatically removed using cd-hit after processing.
-
-The script supports both general and digestion-specific trimming logic (e.g., tryptic peptides for proteomics).
-
-Known limitations
-Only supports standard codon tables
-
-Only FASTA inputs are supported (no GTF/GFF parsing for now)
-
-Memory usage may increase with very large genomes
-
-Future directions
-GUI interface for codon selection and parameter tuning
-
-Support for non-standard genetic codes
-
-Integration with Ensembl REST API for automated genome fetching
-
-This project was developed as part of a Python programming course project.
-[[Course Repository → Insert Link Here]](https://github.com/Code-Maven/wis-python-course-2025-03)
+## This project was developed as part of the Python programming course at the Weizmann Institute of Science  
+https://github.com/Code-Maven/wis-python-course-2025-03
