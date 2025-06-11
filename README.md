@@ -123,8 +123,6 @@ If you encounter errors related to biopython or pandas, ensure all dependencies 
 - Support for non-standard genetic codes.
 - Integration with Ensembl REST API for automated genome fetching.
 
-## License
-MIT License.
 
 ## This project was developed as part of the Python programming course at the Weizmann Institute of Science  
 https://github.com/Code-Maven/wis-python-course-2025-03
