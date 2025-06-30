@@ -7,10 +7,12 @@
 - [What does this project do?](#what-does-this-project-do)
 - [Why is this project useful?](#why-is-this-project-useful)
 - [What kind of input and output does it expect?](#what-kind-of-input-and-output-does-it-expect)
+- [Test Data](#test-data)
 - [Technical setup](#technical-setup)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Example use cases](#example-use-cases)
+- [config.py: Explanation and Parameters](#configpy-explanation-and-parameters)
 - [Known limitations](#known-limitations)
 - [Future directions](#future-directions)
 - [This project was developed as part of the Python programming course](#this-project-was-developed-as-part-of-the-python-programming-course)
@@ -33,7 +35,7 @@ Frameshifting is a biological process that can result in novel peptides, which a
 
 This project is particularly useful for:
 - **Researchers** exploring non-canonical translation events.
-- **Bioinformaticians** analyzing ribosome profiling data.
+- **Bioinformaticians** analyzing proteomic data.
 - **Immunologists** identifying cryptic epitopes.
 - **Peptidomics/proteomics labs** needing custom peptide libraries.
 
@@ -46,7 +48,7 @@ This project is particularly useful for:
 
 ### Output
 - A **FASTA file** containing translated peptides with the frameshift applied.
-- Optionally, a **non-redundant version** of the file processed using `cd-hit`.
+- A detailed **FASTA header** for each query (see documentation)
 
 Each output sequence is labeled with metadata including:
 - The **codon position** where the frameshift occurred.
@@ -54,18 +56,21 @@ Each output sequence is labeled with metadata including:
 - The **site of the shift** (e.g., A-site, P-site).
 - **Truncated in-frame/out-of-frame sequences** for downstream analysis.
 
-## Example use cases
+## Test Data
 
-### Command-line Example
+To test the tool, you can use the provided **test data** included in the `test_data` folder. This folder contains:
+1. **input_sequences.fasta**: A sample FASTA file with some coding DNA sequences (CDS).
+2. **expected_output.fasta**: The expected output file after running the tool with the test data, showing frameshifted peptides.
 
-#Python 3 codon_frameshift.py -f input_sequences.fasta -c CGA -s Asite -di P1 -da Peptidomics -u 13 -l chimeras -st -o output/frameshifted
+To run the pipeline with the test data:
+1. Place the test FASTA file in the `test_data/input/` folder.
+2. Run the pipeline with the following command:
 
-## Testing the Script
-To verify if everything is set up properly, run:
+    ```plaintext
+    python3 config.py
+    ```
 
-python3 codon_frameshift.py -h
-
-This will display the help message and available parameters.
+3. Check the output file in the `test_data/output/` folder.
 
 ## Technical setup
 
@@ -74,9 +79,9 @@ Before running the script, make sure you have the following installed:
 
 - Python 3.6 or higher
 - Required Python libraries:
+  ```bash
   pip install biopython pandas
 
-The cd-hit program must be installed and accessible in your system's PATH.
 
 ### Installation
 Clone this repository:
@@ -86,30 +91,40 @@ cd Codon-Based-Frameshift-Translator
 Install Python dependencies:
 pip install -r requirements.txt
 
-Install cd-hit:
-Ensure cd-hit is installed on your system. You can install it using the package manager on Linux or via brew on macOS:
-
-#### Ubuntu/Debian:
-sudo apt install cd-hit
-
 ### Running the Script
-To run the frameshift translation script, use the following command:
-#python3 codon_frameshift.py \
-  -f input_sequences.fasta \
-  -c CGA \
-  -s Asite \
-  -di P1 \
-  -da Peptidomics \
-  -u 13 \
-  -l chimeras \
-  -st \
-  -o output/frameshifted
+To run the frameshift translation script:
+Format the config.py file to match your needs.
+Then run python3 config.py
 
 This will generate frameshifted sequences for the provided input file.
 
+## config.py: Explanation and Parameters
+
+### What does config.py do?
+The config.py file is the main entry point for running the pipeline. It manages two key steps:
+
+1. **Redundancy Removal**: Removes any redundant sequences from the input FASTA file.
+2. **Codon Translation**: Runs the frameshift translation script (`codon_translation.py`) to generate the frameshifted peptide sequences.
+
+### Parameters in config.py:
+
+#### Paths:
+- **input_fasta**: Path to the input FASTA file containing CDS sequences.
+- **output_fasta**: Path to save the frameshifted peptides output.
+- **deduplicated_fasta**: Path to save the deduplicated sequences.
+- **codon_translation_script**: Path to the script that generates frameshifted peptides (`codon_translation.py`).
+- **redundancy_removal_script**: Path to the redundancy removal script (`rm_redundant.py`).
+
+#### Functions:
+- **ensure_output_directory_exists(output_file)**: Ensures the output directory exists.
+- **run_rm_redundant(input_file, output_file)**: Calls the redundancy removal script.
+- **run_codon_translation(input_file, output_file, stop_aa_flag=False)**: Calls the codon translation script.
+- **delete_deduplicated_file()**: Deletes the temporary deduplicated file after translation.
+- **run_project()**: The main function that runs the entire pipeline.
+
+To customize the behavior, you can adjust the paths and parameters in this file.
+
 ### Troubleshooting
-If you face issues with cd-hit, ensure it is correctly installed and available in the system’s PATH. You can check this by running:
-cd-hit -v
 
 If you encounter errors related to biopython or pandas, ensure all dependencies are correctly installed via pip.
 

@@ -1,0 +1,154 @@
+# Codon-Based Frameshift Translator: Documentation
+
+## 1. Introduction
+
+The **Codon-Based Frameshift Translator** is a Python tool designed to simulate frameshift translation events in protein sequences. Given coding DNA sequences (CDS), the tool generates peptide sequences by introducing frameshifts at specified codons. It allows for various customization options including the direction of frameshift, the amount of upstream sequence retained, and more. This tool is valuable for bioinformatic analysis such as ribosome profiling, immunopeptidomics, and proteomics.
+
+### Core Features:
+- **Frameshift** generation from coding DNA sequences.
+- Customization for **direction** and **upstream retention**.
+- Generate peptides with **stop amino acid** control.
+- Optional **trimming** based on amino acid sequence.
+
+## 2. Key Arguments
+
+### 2.1 **`-f` / `--fasta`**:
+Path to the **input FASTA file** containing CDS sequences. The sequences should be in FASTA format.
+
+### 2.2 **`-c` / `--codon`**:
+The **codon** that will be targeted for frameshift translation. Example: `TTC`.
+
+### 2.3 **`-s` / `--site`**:
+The **site** where frameshift should occur. Options:
+- `emptyA`: Frameshift occurs before the A-site.
+- `Asite`: Frameshift occurs at the A-site.
+- `Psite`: Frameshift occurs at the P-site.
+
+### 2.4 **`-di` / `--direction`**:
+The **direction** of frameshift. Options:
+- `P1`: Shift in the +1 direction.
+- `M1`: Shift in the -1 direction.
+- `M2`: Shift in the -2 direction.
+
+### 2.5 **`-u` / `--upstream`**:
+Specifies how much of the **upstream** sequence should be retained (in nucleotides). For instance, a value of 13 retains the first 13 nucleotides before the codon where frameshift occurs.
+
+### 2.6 **`-l` / `--length`**:
+Defines the **translation type**:
+- `chimeras`: Simulates out-of-frame peptides.
+- `OOF`: Generates out-of-frame peptides until a stop codon is encountered.
+
+### 2.7 **`-st` / `--stop_aa`**:
+If specified, translation stops at the **target amino acid**.
+
+### 2.8 **`-tr` / `--trim`**:
+If specified, the sequence is **trimmed** at the target amino acid.
+
+### 2.9 **`-g` / `--gene_list`**:
+Optionally, provide a **CSV file** with a list of specific genes to include in the processing. The file should have a column labeled "Gene".
+
+### 2.10 **`-o` / `--output`**:
+The **output file prefix**. The generated peptide sequences will be written to a file with this prefix.
+
+## 3. How the Tool Works
+
+### 3.1 Redundancy Removal
+
+The tool uses the **`rm_redundant.py`** script to remove redundant sequences based on sequence identity. Sequences with an identity of 90% or more are considered duplicates and are removed. This ensures that only unique sequences are passed to the frameshift translation process.
+
+### 3.2 Frameshift Translation
+
+The main logic for frameshift translation resides in **`codon_translation.py`**. The tool processes the sequences, applies the frameshift at the specified codon, and generates peptides according to the specified parameters. The translation can stop at a specific amino acid, and peptides can be trimmed based on enzymatic digestion sites.
+
+### 3.3 Output
+
+The output is a **FASTA file** containing the frameshifted peptides. The output sequences include metadata for each sequence that specifies the codon position, frameshift direction, and site. The sequences are labeled with:
+- **Codon position** where the frameshift occurred.
+- **Frameshift direction** (e.g., `+1`, `-1`, `-2`).
+- **Frameshift site** (e.g., `A-site`, `P-site`).
+- **Truncated sequences** (in-frame or out-of-frame) for downstream analysis.
+
+#### **Header Details:**
+
+This header includes:
+1. **Frameshift Direction**: `P1` (in the +1 direction).
+2. **Frameshift Site**: `Asite` (frameshift occurs at the A-site).
+3. **Count**: `count1` (this is the first frameshift event).
+4. **Codon Split**: `TTC` (the targeted codon for frameshift).
+5. **Gene Symbol**: `SampleGene` (the gene associated with this sequence).
+6. **Protein Fragment**: `AYGSGRN` (first 7 amino acids of the protein sequence after frameshift).
+7. **Codon Snippet**: `ATAAGTGCCAG` (a snippet of the sequence around the frameshift site).
+
+### What This Means:
+
+- **`P1`**: The frameshift occurs in the `+1` direction.
+- **`Asite`**: The frameshift happens at the A-site of the ribosome.
+- **`count1`**: This is the first occurrence of a frameshift at this codon.
+- **`TTC`**: The frameshift occurred at the `TTC` codon.
+- **`SampleGene`**: The gene associated with this sequence (or `NoName` if not provided).
+- **`AYGSGRN`**: The first 7 amino acids after translation post-frameshift.
+- **`ATAAGTGCCAG`**: The codon region in the sequence where the frameshift happened.
+
+---
+
+This structure gives a detailed summary of each frameshift event applied to the sequence, making it easier to track and analyze the resulting peptides and their origin.
+
+## 4. Example Workflow
+
+### Step 1: Remove Redundant Sequences
+
+To remove redundant sequences, run:
+
+```plaintext
+python3 rm_redundant.py input_sequences.fasta deduplicated_sequences.fasta
+
+This script compares all sequences pairwise and removes sequences with a similarity of 90% or more.
+
+Step 2: Generate Frameshift Peptides
+Run the frameshift translation after redundancy removal:
+
+python3 config.py
+This will process the input sequences and generate frameshifted peptides based on the provided parameters. The resulting peptides are written to the output file.
+
+5. Troubleshooting
+5.1 FASTA File Issues:
+Ensure that your FASTA files are correctly formatted. The sequences must be in proper FASTA format for the script to process them.
+
+5.2 Python Dependencies:
+If you encounter errors related to missing libraries, ensure that the required Python packages (biopython, pandas) are installed using pip:
+
+pip install biopython pandas
+
+5.3 Gene List Issues:
+If you provide a gene list, ensure the CSV file is correctly formatted and contains a column labeled Gene with valid gene names.
+
+5.4 Redundancy Removal:
+If redundancy removal fails, ensure that the input file is accessible and correctly formatted.
+
+6. Further Information
+6.1 What are Frameshifts?
+Frameshifts occur when a ribosome shifts by an incorrect number of nucleotides, leading to a change in the reading frame. This can create new peptides that are not present in the canonical reading frame and are highly relevant for detecting novel translation events in biological studies.
+
+6.2 Why Use Frameshifts?
+Frameshifting can result in the synthesis of new proteins or peptides that might be critical in various biological processes. By simulating frameshifts in CDS sequences, researchers can generate new peptides for ribosome profiling, proteomics, or immunopeptidomics studies.
+
+7. Known Limitations
+- Only supports standard codon tables (not customizable genetic codes).
+- Only FASTA files are supported (no support for GTF/GFF parsing at the moment).
+- Memory usage can increase with very large genomes.
+
+8. Future Directions
+- GUI Interface: A graphical interface for easier codon selection and parameter tuning.
+- Non-Standard Genetic Codes: Support for customized codon tables beyond the standard.
+- Integration with Ensembl REST API: To automatically fetch genome sequences from the Ensembl database.
+
+Troubleshooting
+Python Dependencies: Ensure that you have installed all the required Python packages by running:
+
+pip install biopython pandas
+
+FASTA File Errors: Make sure your input FASTA file is properly formatted. Every sequence should start with a > symbol followed by a description, followed by the sequence.
+
+Redundancy Removal: If redundancy removal fails, check the input file path and ensure it's accessible. The script removes duplicates based on a 90% identity threshold.
+
+Memory Usage: The tool may use more memory for larger datasets. If you encounter memory issues, try working with smaller datasets or increasing system memory.

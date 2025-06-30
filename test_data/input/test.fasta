@@ -1,0 +1,26 @@
+>ENST00000631435.1 cds chromosome:GRCh38:CHR_HSCHR7_2_CTG6:142847306:142847317:1 gene:ENSG00000282253.1 gene_biotype:TR_D_gene transcript_biotype:TR_D_gene gene_symbol:TRBD1 description:T cell receptor beta diversity 1 [Source:HGNC Symbol;Acc:HGNC:12158]
+ATGGGGTTCACAGGGGGTGA
+>ENST00000415118.1 cds chromosome:GRCh38:14:22438547:22438554:1 gene:ENSG00000223997.1 gene_biotype:TR_D_gene transcript_biotype:TR_D_gene gene_symbol:TRDD1 description:T cell receptor delta diversity 1 [Source:HGNC Symbol;Acc:HGNC:12254]
+GAAATAGT
+>ENST00000448914.1 cds chromosome:GRCh38:14:22449113:22449125:1 gene:ENSG00000228985.1 gene_biotype:TR_D_gene transcript_biotype:TR_D_gene gene_symbol:TRDD3 description:T cell receptor delta diversity 3 [Source:HGNC Symbol;Acc:HGNC:12256]
+ATGACTGGGGGATACG
+>ENST00000434970.2 cds chromosome:GRCh38:14:22439007:22439015:1 gene:ENSG00000237235.2 gene_biotype:TR_D_gene transcript_biotype:TR_D_gene gene_symbol:TRDD2 description:T cell receptor delta diversity 2 [Source:HGNC Symbol;Acc:HGNC:12255]
+ATGCCTTCCTAC
+>ENST00000632684.1 cds chromosome:GRCh38:7:142786213:142786224:1 gene:ENSG00000282431.1 gene_biotype:TR_D_gene transcript_biotype:TR_D_gene gene_symbol:TRBD1 description:T cell receptor beta diversity 1 [Source:HGNC Symbol;Acc:HGNC:12158]
+ATGGGGACAGGGGGC
+>ENST00000632524.1 cds chromosome:GRCh38:CHR_HSCHR14_3_CTG1:105866322:105866332:-1 gene:ENSG00000282455.1 gene_biotype:IG_D_gene transcript_biotype:IG_D_gene gene_symbol:IGHD7-27 description:immunoglobulin heavy diversity 7-27 [Source:HGNC Symbol;Acc:HGNC:5518]
+CTAACTGGGGA
+>ENST00000633009.1 cds chromosome:GRCh38:CHR_HSCHR14_3_CTG1:105881805:105881824:-1 gene:ENSG00000282323.1 gene_biotype:IG_D_gene transcript_biotype:IG_D_gene gene_symbol:IGHD1-26 description:immunoglobulin heavy diversity 1-26 [Source:HGNC Symbol;Acc:HGNC:5485]
+ATGGGTATAGTGGGAGCTACTACTTCGGGAAATTCTAG
+>ENST00000634070.1 cds chromosome:GRCh38:CHR_HSCHR14_3_CTG1:105882310:105882327:-1 gene:ENSG00000282724.1 gene_biotype:IG_D_gene transcript_biotype:IG_D_gene gene_symbol:IGHD6-25 description:immunoglobulin heavy diversity 6-25 [Source:HGNC Symbol;Acc:HGNC:5516]
+ATGGGGTATAGCAGCGGCTACAAAAAAAAAGTCAGTCA
+>ENST00000632963.1 cds chromosome:GRCh38:CHR_HSCHR14_3_CTG1:105884674:105884693:-1 gene:ENSG00000282674.1 gene_biotype:IG_D_gene transcript_biotype:IG_D_gene gene_symbol:IGHD5-24 description:immunoglobulin heavy diversity 5-24 (non-functional) [Source:HGNC Symbol;Acc:HGNC:5510]
+GTAGAGATGGCTACAATTAC
+>ENST00000633030.1 cds chromosome:GRCh38:CHR_HSCHR14_3_CTG1:105885641:105885659:-1 gene:ENSG00000282640.1 gene_biotype:IG_D_gene transcript_biotype:IG_D_gene gene_symbol:IGHD4-23 description:immunoglobulin heavy diversity 4-23 (non-functional) [Source:HGNC Symbol;Acc:HGNC:5504]
+TGACTACGGTGGTAACTCCTTTTTTAAAGGGATGCGTCATGA
+>ENST00000633765.1 cds chromosome:GRCh38:CHR_HSCHR14_3_CTG1:105886802:105886832:-1 gene:ENSG00000282396.1 gene_biotype:IG_D_gene transcript_biotype:IG_D_gene gene_symbol:IGHD3-22 description:immunoglobulin heavy diversity 3-22 [Source:HGNC Symbol;Acc:HGNC:5497]
+ATGGTATTACTATGATAGTAGTGGTTATTACTAC
+>ENST00000632619.1 cds chromosome:GRCh38:CHR_HSCHR14_3_CTG1:105889322:105889349:-1 gene:ENSG00000281984.1 gene_biotype:IG_D_gene transcript_biotype:IG_D_gene gene_symbol:IGHD2-21 description:immunoglobulin heavy diversity 2-21 [Source:HGNC Symbol;Acc:HGNC:5491]
+ATGAGCATATTGTGGTGGTGACTGCTATTCCTTTAAAGGGCCCCGTAATATATATGCGCGCGCTAGGGGGGG
+>ENST00000632968.1 cds chromosome:GRCh38:CHR_HSCHR14_3_CTG1:105891962:105891978:-1 gene:ENSG00000282592.1 gene_biotype:IG_D_gene transcript_biotype:IG_D_gene gene_symbol:IGHD1-20 description:immunoglobulin heavy diversity 1-20 [Source:HGNC Symbol;Acc:HGNC:5484]
+ATGGGTATAACTGGAACGAC
