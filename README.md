@@ -1,5 +1,8 @@
 # Codon-Based Frameshift Translator
 
+### The key to run the pipeline is to modify the config.py according to the user needs and research question. ###
+## We strongly recommend to run the test data, read the README and documentation files before proceeding ##
+
 [![Python version](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -42,6 +45,7 @@ This project is particularly useful for:
 ## What kind of input and output does it expect?
 
 ### Input
+- The key to run the pipeline is to modify the config.py according to the user needs and research question.
 - A **FASTA file** containing coding DNA sequences (CDS).
 - A **codon of interest** (e.g., `CGA`).
 - Optional: a **CSV file** listing specific genes to include in the processing.
