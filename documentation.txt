@@ -20,7 +20,7 @@ The **codon** that will be targeted for frameshift translation. Example: `TTC`.
 
 ### 2.3 **`-s` / `--site`**:
 The **site** where frameshift should occur. Options:
-- `emptyA`: Frameshift occurs before the A-site.
+- `emptyA`: Frameshift occurs before the A-site and not including the A-site AA in the sequence.
 - `Asite`: Frameshift occurs at the A-site.
 - `Psite`: Frameshift occurs at the P-site.
 
