@@ -123,44 +123,65 @@ def split_at_target_aa(protein_out, cod, aa, trim):
 
 
 def read_cds(fasta, cod, upstream, length, site, direction, stop_aa, gene_list, table, path_writing, trim):
-    with open(path_writing + '.fasta', "w+") as out_file:
-        nn_peptide = NoNamePeptides()
-        shifted_found = False
-        for record in SeqIO.parse(fasta, "fasta"):
-            seq = record.seq
-            description = record.description
-            gene = extract_gene_symbol(description)
+    output_file = path_writing + '.fasta'
 
-            # Debugging: Print sequence and gene info
-            print(f"Processing sequence: {description}")
-            print(f"Sequence: {seq}")
+    entries = []  # collect (header, seq) tuples
+    nn_peptide = NoNamePeptides()
+    shifted_found = False
 
-            if gene_list:
-                genes = pd.read_csv(gene_list)['Gene'].tolist()
-                if gene not in genes:
-                    print(f"Skipping gene {gene} as it's not in the gene list.")
-                    continue  # Skip the gene if it's not in the list
+    for record in SeqIO.parse(fasta, "fasta"):
+        seq = record.seq
+        description = record.description
+        gene = extract_gene_symbol(description)
 
-            # Debugging: Check if codon is present in the sequence
-            if cod not in seq:
-                print(f"Skipping {description} as codon {cod} is not in the sequence.")
-                continue
+        # Debugging: Print sequence and gene info
+        print(f"Processing sequence: {description}")
+        print(f"Sequence: {seq}")
 
-            shifted = translate_shift(seq, description, cod, upstream, length, site, direction, stop_aa, table, trim)
+        if gene_list:
+            genes = pd.read_csv(gene_list)['Gene'].tolist()
+            if gene not in genes:
+                print(f"Skipping gene {gene} as it's not in the gene list.")
+                continue  # Skip the gene if it's not in the list
 
-            for k, v in shifted.items():
-                out_file.write(k + "\n")
-                out_file.write(v + "\n")
-                nn_peptide.add(k, v)
-                shifted_found = True  # Mark that we've processed a peptide
+        # Check if codon is present in the sequence
+        if cod not in seq:
+            print(f"Skipping {description} as codon {cod} is not in the sequence.")
+            continue
 
-        # If we have any NoName peptides, write them too
-        for k, v in nn_peptide.get():
-            out_file.write(k + "\n")
-            out_file.write(v + "\n")
+        shifted = translate_shift(seq, description, cod, upstream, length, site, direction, stop_aa, table, trim)
 
-        if not shifted_found:
-            print("Warning: No valid peptides were processed. Please check your input data.")
+        for k, v in shifted.items():
+            entries.append((k, v))
+            nn_peptide.add(k, v)
+            shifted_found = True  # Mark that we've processed a peptide
+
+    # Add any NoName peptides that are not duplicates
+    for k, v in nn_peptide.get():
+        entries.append((k, v))
+
+    # Filter out peptides shorter than 8 amino acids
+    min_len = 8
+    retained = [(h, s) for (h, s) in entries if len(s) >= min_len]
+    removed_count = len(entries) - len(retained)
+
+    # Write filtered results to file
+    with open(output_file, "w+") as out_file:
+        for h, s in retained:
+            out_file.write(h + "\n")
+            out_file.write(s + "\n")
+
+    # Reporting
+    if removed_count > 0:
+        print(f"Removed {removed_count} peptides shorter than {min_len} AA.")
+
+    print(f"Wrote {len(retained)} peptides to {output_file}")
+
+    if not shifted_found:
+        print("Warning: No valid peptides were processed. Please check your input data.")
+
+    if len(retained) == 0:
+        print("Warning: No peptides met the minimum length threshold. Output FASTA is empty.")
 
     return
 

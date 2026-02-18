@@ -50,6 +50,12 @@ Optionally, provide a **CSV file** with a list of specific genes to include in t
 ### 2.10 **`-o` / `--output`**:
 The **output file prefix**. The generated peptide sequences will be written to a file with this prefix.
 
+### Notes on units and output filtering
+
+- **Upstream units**: Although earlier examples in this documentation reference nucleotides, the current implementation treats the `-u/--upstream` value as an amino-acid count (number of AAs retained upstream). If you want to specify upstream in nucleotides, divide by 3 and supply the resulting AA count (for example, use `-u 13` to keep ~13 AAs upstream).
+
+- **Output filtering**: The pipeline now removes any header/sequence pairs where the translated peptide (the concatenated `protein_in + protein_out`) is shorter than 8 amino acids. After running, the script prints a short summary such as "Removed X peptides shorter than 8 AA." and "Wrote Y peptides to <path>". If no peptides meet the threshold, the output FASTA will be empty and a warning is printed.
+
 ## 3. How the Tool Works
 
 ### 3.1 Redundancy Removal
